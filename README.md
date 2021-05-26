@@ -1,6 +1,6 @@
 # mrequests
 
-A HTTP client module for MicroPython with an API *similar* to [requests].
+An HTTP client module for MicroPython with an API *similar* to [requests].
 
 This is an evolution of the [urequests] module from [micropython-lib] with a few
 extensions and many fixes and convenience features.
@@ -169,11 +169,6 @@ to resource leaks and malfunction.
 >>> r.close()
 ```
 
-[micropython-lib]: https://github.com/micropython/micropython-lib
-[requests]: https://github.com/psf/requests
-[test_urlparse]: ./tests/test_urlparse.py
-[urequests]: https://github.com/micropython/micropython-lib/blob/master/urequests/urequests.py
-
 
 ## Reference
 
@@ -277,3 +272,9 @@ delete(url, **kw)
 ```
 
 The url and all keyword arguments are simply passed to `request`.
+
+
+[micropython-lib]: https://github.com/micropython/micropython-lib
+[requests]: https://github.com/psf/requests
+[test_urlparse]: ./tests/test_urlparse.py
+[urequests]: https://github.com/micropython/micropython-lib/blob/master/urequests/urequests.py
