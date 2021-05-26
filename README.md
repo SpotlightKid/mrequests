@@ -274,7 +274,23 @@ delete(url, **kw)
 The url and all keyword arguments are simply passed to `request`.
 
 
+## Authors
+
+**mrequests** is based on [urequests], written by *Paul Sokolovsky* and
+part of [micropython-lib] and licensed under the [MIT license]. It was further
+developed and is maintained by *Christopher Arndt*.
+
+
+## License
+
+**mrequests** is distributed under the terms of the [MIT license] and is free
+and Open Source software.
+
+Please see the file [LICENSE](./LICENSE) for details.
+
+
 [micropython-lib]: https://github.com/micropython/micropython-lib
+[mit license]: http://opensource.org/licenses/MIT
 [requests]: https://github.com/psf/requests
 [test_urlparse]: ./tests/test_urlparse.py
 [urequests]: https://github.com/micropython/micropython-lib/blob/master/urequests/urequests.py
