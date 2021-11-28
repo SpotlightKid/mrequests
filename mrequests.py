@@ -152,7 +152,7 @@ class Response:
 
                 if self._chunk_size == 0:
                     # End of message
-                    sep = sf.read(2)
+                    sep = self.sf.read(2)
                     if sep != b"\r\n":
                         raise ValueError("Expected final chunk separator, read %r instead." % sep)
 
@@ -177,19 +177,28 @@ class Response:
         read = 0
 
         with open(fn, "wb") as fp:
-            while True:
-                remain = self._content_size - read
 
-                if remain <= 0:
-                    break
+            if self.chunked:
 
-                chunk = self.read(min(chunk_size, remain))
-                read += len(chunk)
+                chunk = self.read()
+                while len(chunk) > 0:
+                    fp.write(chunk)
+                    chunk = self.read()
 
-                if not chunk:
-                    break
+            else:
+                while True:
+                    remain = self._content_size - read
 
-                fp.write(chunk)
+                    if remain <= 0:
+                        break
+
+                    chunk = self.read(min(chunk_size, remain))
+                    read += len(chunk)
+
+                    if not chunk:
+                        break
+
+                    fp.write(chunk)
 
         self.close()
 
