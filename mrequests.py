@@ -152,7 +152,7 @@ class Response:
 
                 if self._chunk_size == 0:
                     # End of message
-                    sep = sf.read(2)
+                    sep = self.sf.read(2)
                     if sep != b"\r\n":
                         raise ValueError("Expected final chunk separator, read %r instead." % sep)
 
