@@ -180,10 +180,10 @@ class Response:
 
             if self.chunked:
 
-                t = self.read()
-                while len(t) > 0:
-                    fp.write(t)
-                    t = self.read()
+                chunk = self.read()
+                while len(chunk) > 0:
+                    fp.write(chunk)
+                    chunk = self.read()
 
             else:
                 while True:
