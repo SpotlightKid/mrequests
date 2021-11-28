@@ -177,19 +177,28 @@ class Response:
         read = 0
 
         with open(fn, "wb") as fp:
-            while True:
-                remain = self._content_size - read
 
-                if remain <= 0:
-                    break
+            if self.chunked:
 
-                chunk = self.read(min(chunk_size, remain))
-                read += len(chunk)
+                t = self.read()
+                while len(t) > 0:
+                    fp.write(t)
+                    t = self.read()
 
-                if not chunk:
-                    break
+            else:
+                while True:
+                    remain = self._content_size - read
 
-                fp.write(chunk)
+                    if remain <= 0:
+                        break
+
+                    chunk = self.read(min(chunk_size, remain))
+                    read += len(chunk)
+
+                    if not chunk:
+                        break
+
+                    fp.write(chunk)
 
         self.close()
 
