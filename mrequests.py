@@ -141,14 +141,18 @@ class Response:
         self.headers = [] if save_headers else None
 
     def read(self, size=MAX_READ_SIZE):
+        sf = self.sf
+
         if self.chunked:
             if self._chunk_size == 0:
-                l = self.sf.readline()
-                # print("Chunk line:", l)
+                l = sf.readline().strip()
+
+                if not l:
+                    return b''
+
                 # ignore chunk extensions
                 l = l.split(b";", 1)[0]
-                self._chunk_size = int(l, 16)
-                # print("Chunk size:", self._chunk_size)
+                self._chunk_size = max(0, int(l, 16))
 
                 if self._chunk_size == 0:
                     # End of message
@@ -158,32 +162,36 @@ class Response:
 
                     return b""
 
-            data = self.sf.read(min(size, self._chunk_size))
-            self._chunk_size -= len(data)
+            data = sf.read(min(size or MAX_READ_SIZE, self._chunk_size))
+            self._chunk_size -= max(0, len(data))
 
             if self._chunk_size == 0:
-                sep = self.sf.read(2)
+                sep = sf.read(2)
                 if sep != b"\r\n":
                     raise ValueError("Expected chunk separator, read %r instead." % sep)
 
             return data
         else:
             if size:
-                return self.sf.read(size)
+                return sf.read(size)
             else:
-                return self.sf.read(self._content_size)
+                return sf.read(self._content_size)
 
     def save(self, fn, chunk_size=1024):
         read = 0
 
         with open(fn, "wb") as fp:
             while True:
-                remain = self._content_size - read
+                if self.chunked:
+                    chunk = self.read()
+                else:
+                    remain = self._content_size - read
 
-                if remain <= 0:
-                    break
+                    if remain <= 0:
+                        break
 
-                chunk = self.read(min(chunk_size, remain))
+                    chunk = self.read(min(chunk_size, remain))
+
                 read += len(chunk)
 
                 if not chunk:
