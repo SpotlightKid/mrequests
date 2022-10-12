@@ -1,10 +1,4 @@
-"""Example script for testing redirection support of mrequest.
-
-To run this, first start the httpbin server:
-
-    docker run -p 80:80 kennethreitz/httpbin
-
-"""
+"""Example script for testing redirection support of mrequest."""
 
 import sys
 import mrequests as requests
@@ -12,8 +6,7 @@ import mrequests as requests
 
 print("Running on platform:", sys.platform)
 
-#host = 'http://httpbin.org/'
-host = "http://localhost/"
+host = 'http://httpbin.org/'
 base_url = host + "redirect/"
 
 url = base_url + "1"
