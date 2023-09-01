@@ -178,7 +178,7 @@ class Response:
             if buf:
 
                 # Read into the buffer
-                n_read = sf.readinto(buf, _read_size)
+                n_read = sf.readinto(buf)
 
                 return n_read
             else:
@@ -186,6 +186,10 @@ class Response:
 
     def save(self, fn, buf=None, chunk_size=1024):
         read = 0
+
+        # If memory is not provided, create a buffer
+        if buf is None and not self.chunked:
+            buf = memoryview(bytearray(chunk_size))
 
         # Whether or not we are using a buffer
         using_buf = buf is not None
@@ -197,10 +201,13 @@ class Response:
             while True:
 
                 if using_buf:
-                    n_read = self.read(min(chunk_size, remain), buf=buf)
+                    # print("Saving using buffer")
+                    n_read = self.read(buf=buf)
 
                     if n_read == 0:
                         break
+
+                    # print("Read {} bytes".format(n_read))
 
                     read += n_read
 
