@@ -160,13 +160,14 @@ class Response:
                 if self._chunk_size == 0:
                     # End of message
                     sep = sf.read(2)
+
                     if sep != b"\r\n":
                         raise ValueError("Expected final chunk separator, read %r instead." % sep)
 
                     return b""
 
             data = sf.read(min(size or MAX_READ_SIZE, self._chunk_size))
-            self._chunk_size -= max(0, len(data))
+            self._chunk_size = max(0, self._chunk_size - len(data))
 
             if self._chunk_size == 0:
                 sep = sf.read(2)
@@ -175,34 +176,53 @@ class Response:
 
             return data
         else:
-            if size:
-                return sf.read(size)
+            return sf.read(size if size else self._content_size)
+
+    def readinto(self, buf, size=0):
+        if size:
+            return self._sf.readinto(buf, size)
+        else:
+            return self._sf.readinto(buf)
+
+    def save(self, fn, buf=None, chunk_size=0):
+        with open(fn, "wb") as fobj:
+            return self.saveinto(fobj, buf, chunk_size)
+
+    def saveinto(self, fobj, buf=None, chunk_size=0):
+        num_read_total = 0
+
+        if buf:
+            if self.chunked:
+                raise NotImplementedError("Cannot use a buffer when saving a chunked response.")
+            if chunk_size and not MICROPY:
+                raise NotImplementedError("Cannot set chunk_size when using a buffer with CPython."
+                    " Use a buffer or memoryview of appropriate size instead.")
+
+        while True:
+            if buf:
+                num_read_chunk = self.readinto(buf, chunk_size)
+
+                if not num_read_chunk:
+                    break
+
+                num_read_total += num_read_chunk
+                fobj.write(buf[:num_read_chunk])
             else:
-                return sf.read(self._content_size)
-
-    def save(self, fn, chunk_size=1024):
-        read = 0
-
-        with open(fn, "wb") as fp:
-            while True:
-                if self.chunked:
-                    chunk = self.read()
-                else:
-                    remain = self._content_size - read
-
-                    if remain <= 0:
-                        break
-
-                    chunk = self.read(min(chunk_size, remain))
-
-                read += len(chunk)
+                # Read a chunk of data
+                chunk = self.read(size=None if self.chunked
+                                  else min(chunk_size or MAX_READ_SIZE, remain))
+                num_read_total += len(chunk)
 
                 if not chunk:
                     break
 
-                fp.write(chunk)
+                fobj.write(chunk)
 
-        self.close()
+            if not self.chunked:
+                remain = self._content_size - num_read_total
+
+                if remain <= 0:
+                    break
 
     def _parse_header(self, data):
         if data[:18].lower() == b"transfer-encoding:" and b"chunked" in data[18:]:
@@ -222,7 +242,7 @@ class Response:
             self.headers.append(data.rstrip(b"\r\n"))
 
     def close(self):
-        if not MICROPY:
+        if self._sf and not MICROPY:
             self._sf.close()
             self._sf = None
         if self._sock:
@@ -288,8 +308,7 @@ def request(
         ctx.redirect = False
 
         # print("Resolving host address...")
-        ai = socket.getaddrinfo(ctx.host, ctx.port, 0, socket.SOCK_STREAM)
-        ai = ai[0]
+        ai = socket.getaddrinfo(ctx.host, ctx.port, 0, socket.SOCK_STREAM)[0]
 
         # print("Creating socket...")
         sock = socket.socket(ai[0], ai[1], ai[2])

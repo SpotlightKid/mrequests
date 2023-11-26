@@ -31,8 +31,11 @@ support is required.
 * Response headers can optionally be saved in the response object.
 * Respects `Content-length` header in response.
 * Supports responses with chunked transfer encoding.
-* `Response` objects have a `save` method to save the response body to
-  a file, reading the response data and writing the file in small chunks.
+* `Response` objects have a `readinto` method to store the response body to a
+  given buffer (or `memoryview`) in chunks of maximum `len(buffer)` size.
+* `Response` objects have `save` and `saveto` methods to save the response
+  body to a file (given by filename resp. file object), reading the response
+  data and writing the file in small chunks.
 * The `Response` class for response objects can be substituted by a custom
   response class (usually defined by subclassing `Response`).
 
