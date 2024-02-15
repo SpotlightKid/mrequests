@@ -235,7 +235,7 @@ Defaults to `mrequests.Response`. Custom response classes should sub-class
 `mrequests.Response` and must take the same constructor arguments.
 
 *save_headers (bool)* - a boolean, which is passed to the constructor of the
-response class instance, which determines whether it keeps a refernce to the
+response class instance, which determines whether it keeps a reference to the
 response headers in the instance. This is set to `False` by default to save
 memory. If set to `True`, the default response class will make the reponse
 header lines available via its `headers` instance attribute as a list of
