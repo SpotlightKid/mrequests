@@ -1,0 +1,12 @@
+{
+  "urls": [
+    ["mrequests/__init__.py", "github:SpotlightKid/mrequests/mrequests.py"],
+    ["mrequests/urlencode.py", "github:SpotlightKid/mrequests/urlencode.py"],
+    ["mrequests/urlparseqs.py", "github:SpotlightKid/mrequests/urlparseqs.py"],
+    ["mrequests/urlunquote.py", "github:SpotlightKid/mrequests/urlunquote.py"]
+  ],
+  "deps": [
+    ["collections-defaultdict", "latest"]
+  ],
+  "version": "0.2"
+}
