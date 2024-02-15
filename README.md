@@ -80,12 +80,19 @@ support is required.
 
 ## Installation
 
+While there are multiple ways to install the library from your PC's command line, two installation methods are provided through shell scripts
+
+* **mpremote**
+* **rshell** (legacy)
+
 ### mpremote
 
 The following should be installed and in your shell's `PATH`:
 
 * `mpy-cross`
 * `mpremote`
+
+Run the command
 
     ./install_mpremote.sh
 
