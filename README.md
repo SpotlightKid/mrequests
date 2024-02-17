@@ -37,32 +37,32 @@ support is required.
 
 ### Limitations
 
-- `mrequests.request` is a synchroneous, blocking function.
-- The code is *not* interrupt save and a fair amount of memory allocation is
+* `mrequests.request` is a synchroneous, blocking function.
+* The code is *not* interrupt save and a fair amount of memory allocation is
   happening in the process of handling a request.
-- URL parsing does not cover all corner cases (see [test_urlparse] for details).
-- URLs with authentication credentials in the host part (e.g.
+* URL parsing does not cover all corner cases (see [test_urlparse] for details).
+* URLs with authentication credentials in the host part (e.g.
   `http://user:secret@myhost/`) are *not supported*. Pass authentication
   credentials separately via the `auth` argument instead.
-- SSL/TLS support on the MicroPython *unix*, *stm32* and *esp8266* ports is
+* SSL/TLS support on the MicroPython *unix*, *stm32* and *esp8266* ports is
   limited. In particular, their `ssl` module does not support all encryption
   schemes commonly in use by popular servers, meaning that trying to connect
   to them via HTTPS will fail with various cryptic error messages.
-- Request and JSON data may be passed in as bytes or strings and the request
+* Request and JSON data may be passed in as bytes or strings and the request
   data will be encoded to bytes, if necessary, using the encoding given with
   the `encoding` parameter. But be aware that encodings other than `utf-8` are
   *not supported* by most (any?) MicroPython implementations.
-- Custom headers may be passed as a dictionary with string or bytes keys and
+* Custom headers may be passed as a dictionary with string or bytes keys and
   values and must contain only ASCII chars. If you need header values to use
   non-ASCII chars, you need to encode them according to RFC 8187.
-- The URL and specifically any query string parameters it contains will not be
+* The URL and specifically any query string parameters it contains will not be
   URL-encoded, and it may contain only ASCII chars. Make sure you encode the
   query string part of the URL with `urlencode.quote` before passing it, if
   necessary.
-- When encoding `str` instances via `urlencode.urlencode` or `urlencode.quote`,
+* When encoding `str` instances via `urlencode.urlencode` or `urlencode.quote`,
   the `encoding` and `errors` arguments are currently ignored by MicroPython and
   it behaves as if their values were `"utf-8"` resp. `"ignore"`.
-- In responses using "chunked" transfer-encoding, chunk extensions and trailers
+* In responses using "chunked" transfer-encoding, chunk extensions and trailers
   are ignored.
 
 
@@ -86,8 +86,30 @@ support is required.
 
 ## Installation
 
-Make sure you have `mpy-cross` and `rshell` installed and in your shell's
-`PATH`.
+While there are multiple ways to install the library from your PC's command line, two installation methods are provided through shell scripts
+
+* **mpremote**
+* **rshell** (legacy)
+
+
+### mpremote
+
+The following should be installed and in your shell's `PATH`:
+
+* `mpy-cross`
+* `mpremote`
+
+Run the command
+
+    ./install_mpremote.sh
+
+
+### rshell
+
+The following should be installed and in your shell's `PATH`:
+
+* `mpy-cross`
+* `rshell`
 
 For boards with the `stm32` port:
 
@@ -116,6 +138,7 @@ use).
 ## Examples
 
 See the scripts in the [examples](./examples) directory for more.
+
 
 ### Simple GET request with JSON response
 
@@ -287,7 +310,6 @@ developed and is maintained by *Christopher Arndt*.
 and Open Source software.
 
 Please see the file [LICENSE](./LICENSE) for details.
-
 
 [micropython-lib]: https://github.com/micropython/micropython-lib
 [mit license]: http://opensource.org/licenses/MIT
