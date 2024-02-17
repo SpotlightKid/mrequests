@@ -5,7 +5,9 @@ An HTTP client module for MicroPython with an API *similar* to [requests].
 This is an evolution of the [urequests] module from [micropython-lib] with a few
 extensions and many fixes and convenience features.
 
+
 ## Features & Limitations
+
 
 ### Compatibility
 
@@ -17,6 +19,7 @@ due to problems with MicroPython's `ssl` module on these platforms.
 
 On the stm32 port installing a custom-compiled firmware with network/SSL
 support is required.
+
 
 ### Features
 
@@ -30,6 +33,7 @@ support is required.
   a file, reading the response data and writing the file in small chunks.
 * The `Response` class for response objects can be substituted by a custom
   response class.
+
 
 ### Limitations
 
@@ -61,6 +65,7 @@ support is required.
 * In responses using "chunked" transfer-encoding, chunk extensions and trailers
   are ignored.
 
+
 ### Redirection Support
 
 * Can follow redirects for response status codes 301, 302, 303, 307 and 308.
@@ -78,12 +83,14 @@ support is required.
 * The code does not check for infinite redirection cycles. It is advised to
   keep `max_redirects` to a low number instead.
 
+
 ## Installation
 
 While there are multiple ways to install the library from your PC's command line, two installation methods are provided through shell scripts
 
 * **mpremote**
 * **rshell** (legacy)
+
 
 ### mpremote
 
@@ -95,6 +102,7 @@ The following should be installed and in your shell's `PATH`:
 Run the command
 
     ./install_mpremote.sh
+
 
 ### rshell
 
@@ -126,9 +134,11 @@ provide support for sending form-encoded request parameters or data (see the
 `formencode.py` script in the `examples` directory for an example of their
 use).
 
+
 ## Examples
 
 See the scripts in the [examples](./examples) directory for more.
+
 
 ### Simple GET request with JSON response
 
@@ -165,6 +175,7 @@ It is mandatory to close response objects as soon as you finished working with
 them. On MicroPython platforms without full-fledged OS, not doing so may lead
 to resource leaks and malfunction.
 
+
 ### HTTP Basic Auth
 
 ```py
@@ -180,6 +191,7 @@ to resource leaks and malfunction.
 }
 >>> r.close()
 ```
+
 
 ## Reference
 
@@ -284,11 +296,13 @@ delete(url, **kw)
 
 The url and all keyword arguments are simply passed to `request`.
 
+
 ## Authors
 
 **mrequests** is based on [urequests], written by *Paul Sokolovsky* and
 part of [micropython-lib] and licensed under the [MIT license]. It was further
 developed and is maintained by *Christopher Arndt*.
+
 
 ## License
 
