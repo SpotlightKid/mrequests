@@ -10,5 +10,5 @@ for py in ${MODULES[*]}; do
     ${RSHELL:-rshell} --quiet \
         -b ${BAUD:-9600} \
         -p ${PORT:-/dev/ttyACM0} \
-        cp "${py%.*}".mpy "${DESTDIR:-/pyboard}"
+        cp "${py%.*}".mpy "${DESTDIR:-/pyboard/lib}"
 done
