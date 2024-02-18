@@ -86,41 +86,69 @@ support is required.
 
 ## Installation
 
-While there are multiple ways to install the library from your PC's command line, two installation methods are provided through shell scripts
+While there are multiple ways to install the library from your PC's command
+line, three different installation methods are provided via different scripts:
 
-* **mpremote**
-* **rshell** (legacy)
+* `install_mpremote.sh`(Bash script using [mpremote] binary)
+* `install.sh` (Bash script using [rshell] binary, legacy)
+* `install.py` (Python script using `mpremote` as alibrary)
 
 
-### mpremote
+### `install_mpremote.sh`
 
 The following should be installed and in your shell's `PATH`:
 
 * `mpy-cross`
 * `mpremote`
 
-Run the command
+Run the command:
 
     ./install_mpremote.sh
 
+This will compile the Python modules with `mpy-cross` and copy the resulting
+`.mpy` files to the board's flash using the `mpremote` command.
 
-### rshell
+
+### `install.sh`
 
 The following should be installed and in your shell's `PATH`:
 
 * `mpy-cross`
 * `rshell`
 
-For boards with the `stm32` port:
+For boards with the `stm32` port run:
 
     DESTDIR=/flash ./install.sh
 
-For boards with the `esp8266` or `esp32` port:
+For boards with the `esp8266` or `esp32` port run:
 
     DESTDIR=/pyboard PORT=/dev/ttyUSB0 BAUD=115200 ./install.sh
 
 This will compile the Python modules with `mpy-cross` and copy the resulting
-`.mpy` files to the board's flash.
+`.mpy` files to the board's flash using the `rshell` comamnd.
+
+
+### `install.py`
+
+The following should be installed and in your shell's `PATH`:
+
+* `mpy-cross`
+
+Also, `mpremote` should be available on your `PYTHONPATH`, e.g. installed via
+`pip`:
+
+    python -m pip install mpremote
+
+Then run simply `install.py`:
+
+    ./install.py
+
+This will compile the Python modules with `mpy-cross` and copy the resulting
+`.mpy` files to the board's flash using the `mpremote` library. Run
+`install.py -h` to see installation options.
+
+
+### Manual installation
 
 For the `unix` port, just copy all the `.py` files in the root of the
 repository to a directory, which is in `sys.path`, e.g. `~/.micropython/lib`
@@ -313,6 +341,8 @@ Please see the file [LICENSE](./LICENSE) for details.
 
 [micropython-lib]: https://github.com/micropython/micropython-lib
 [mit license]: http://opensource.org/licenses/MIT
+[mpremote]: https://docs.micropython.org/en/latest/reference/mpremote.html
 [requests]: https://github.com/psf/requests
+[rshell]: https://pypi.org/project/rshell/
 [test_urlparse]: ./tests/test_urlparse.py
 [urequests]: https://github.com/micropython/micropython-lib/blob/master/urequests/urequests.py
