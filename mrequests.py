@@ -208,6 +208,8 @@ class Response:
         elif data[:15].lower() == b"content-length:":
             self._content_size = int(data.split(b":", 1)[1])
             # print("Content length: %i" % self._content_size)
+        elif data[:17].lower() == b"content-encoding:":
+            self.encoding = data[17:].decode().strip()
 
     # overwrite this method, if you want to process/store headers differently
     def add_header(self, data):
