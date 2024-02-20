@@ -300,14 +300,18 @@ def request(
 
             sf = sock if MICROPY else sock.makefile("rwb")
             sf.write(b"%s %s HTTP/1.1\r\n" % (ctx.method.encode("ascii"), ctx.path.encode("ascii")))
-
-            if not b"Host" in headers:
-                sf.write(b"Host: %s\r\n" % ctx.host.encode())
+            sf.write(b"Host: %s\r\n" % headers.get(b"Host", ctx.host.encode()))
 
             for k, val in headers.items():
-                sf.write(k if isinstance(k, bytes) else k.encode('ascii'))
+                if not isinstance(k, bytes):
+                    k = k.encode("ascii")
+
+                if k.lower() == b"host":
+                    continue
+
+                sf.write(k)
                 sf.write(b": ")
-                sf.write(val if isinstance(val, bytes) else val.encode('ascii'))
+                sf.write(val if isinstance(val, bytes) else val.encode("ascii"))
                 sf.write(b"\r\n")
 
             if data and ctx.method not in ("GET", "HEAD"):

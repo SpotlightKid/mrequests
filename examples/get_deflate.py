@@ -1,11 +1,11 @@
 import zlib
-import mrequests as requests
+import mrequests
 
 
 host = "http://httpbin.org/"
 #host = "http://localhost/"
 url = host + "deflate"
-r = requests.get(url, headers={"TE": "deflate"})
+r = mrequests.get(url, headers={b"TE": b"deflate"}, save_headers=True)
 
 if r.status_code == 200:
     print("Response body length: %i" % len(r.content))

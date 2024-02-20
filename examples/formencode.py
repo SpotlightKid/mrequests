@@ -5,9 +5,12 @@ def request(method, url, data=None, json=None, headers=None, encoding=None):
     if isinstance(data, dict):
         from urlencode import urlencode
 
+        if headers is None:
+            headers = {}
+
+        headers[b"Content-Type"] = "application/x-www-form-urlencoded"
         data = urlencode(data, encoding=encoding)
-        headers = {} if headers is None else headers
-        headers["Content-Type"] = "application/x-www-form-urlencoded"
+
     return mrequests.request(method, url, data=data, json=json, headers=headers)
 
 

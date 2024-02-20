@@ -1,10 +1,9 @@
-import mrequests as requests
-
+import mrequests
 
 host = 'http://httpbin.org/'
 #host = "http://localhost/"
 url = host + "get"
-r = requests.get(url, headers={"Accept": "application/json"})
+r = mrequests.get(url, headers={b"Accept": b"application/json"})
 print(r)
 
 if r.status_code == 200:
