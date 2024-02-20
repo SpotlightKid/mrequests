@@ -44,12 +44,14 @@ support is required.
 * URLs with authentication credentials in the host part (e.g.
   `http://user:secret@myhost/`) are *not supported*. Pass authentication
   credentials separately via the `auth` argument instead.
-* SSL/TLS support on the MicroPython *unix*, *stm32* and *esp8266* ports is
+* SSL/TLS support on the MicroPython `unix`, `stm32` and `esp8266` ports is
   limited. In particular, their `ssl` module does not support all encryption
   schemes commonly in use by popular servers, meaning that trying to connect
   to them via HTTPS will fail with various cryptic error messages.
-* Request and JSON data may be passed in as bytes or strings and the request
-  data will be encoded to bytes, if necessary, using the encoding given with
+
+    On the `esp8266` port no TLS server certificate validation is performed.
+* Request and JSON data may be passed in as `bytes` or strings and the request
+  data will be encoded to `bytes`, if necessary, using the encoding given with
   the `encoding` parameter. But be aware that encodings other than `utf-8` are
   *not supported* by most (any?) MicroPython implementations.
 * Custom headers may be passed as a dictionary with `bytes` keys and values
@@ -88,7 +90,7 @@ support is required.
 * Redirects are allowed to change the protocol from `http` to `https`,
   but redirects changing from `https` to `http` will not be followed.
 * The `request` function has an additional keyword argument `max_redirects`,
-  defaulting to 1, which controls how many level of redirections are followed.
+  defaulting to 1, which controls how many levels of redirections are followed.
   If this is exceeded, the function raises a `ValueError`.
 * The code does not check for infinite redirection cycles. It is advised to
   keep `max_redirects` to a low number instead.
@@ -245,7 +247,7 @@ request(method, url, data=None, json=None, headers={}, auth=None,
 
 Parameters:
 
-*method (str)* - the HTTP method as a string in all-caps.
+*method (str)* - the HTTP request method as a string in all-caps.
 
 *url (str)* - the URL of the request as a string. This must be an absolute URL,
 including the protocol (only `http://` and `https://` are supported) and a host
