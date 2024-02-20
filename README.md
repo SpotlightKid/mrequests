@@ -52,9 +52,19 @@ support is required.
   data will be encoded to bytes, if necessary, using the encoding given with
   the `encoding` parameter. But be aware that encodings other than `utf-8` are
   *not supported* by most (any?) MicroPython implementations.
-* Custom headers may be passed as a dictionary with string or bytes keys and
-  values and must contain only ASCII chars. If you need header values to use
-  non-ASCII chars, you need to encode them according to RFC 8187.
+* Custom headers may be passed as a dictionary with `bytes` keys and values
+  and keys and values must contain only ASCII chars. If you need header values
+  to use non-ASCII chars, you need to encode them according to RFC 8187.
+
+    The header dictionary *may* contain also string keys and values, but:
+
+    * Using MicroPython, it causes `Warning: Comparison between bytes and str`
+      to be printed to the standard error output when calling `request`.
+    * It causes additional memory allocations.
+    * The "Host" header (if present) must always use `b"Host"` as the header
+      dictionary key, i.e. it must be of type `bytes` and use this exact
+      capitalization (unless the headers dictionary uses an implementation with
+      case-insensitive key lookup).
 * The URL and specifically any query string parameters it contains will not be
   URL-encoded, and it may contain only ASCII chars. Make sure you encode the
   query string part of the URL with `urlencode.quote` before passing it, if
@@ -263,13 +273,13 @@ the request data. To avoid allocation, pass a JSON-encoded byte string with the
 *data* parameter instead.
 
 *headers (dict)* - a dictionary of additional request headers to sent. Keys and
-values can by `bytes` or `str` instances and may contain only ASCII chars.
-`str` keys and values will be converted to `bytes` using ASCII encoding, which
-causes memory allocation.
+values should be `bytes` instances and may contain only ASCII chars. They *may*
+be `str` instances, but see "Limitations". `str` keys and values will be
+converted to `bytes` using ASCII encoding, which causes memory allocation.
 
 A `Content-Length` header will always be added, using the length of the request
-data as the value. If no `Host` header was passed, one will be added, using the
-host name from the URL as the value.
+data as the value. If no `b"Host"` key is present in the header dictionary, the
+`Host` header value will be generated based on the host name from the URL.
 
 *auth (tuple)* - HTTP basic authentication credentials given as a
 `(user, password)` tuple of `bytes` objects or a callable, returning such a
