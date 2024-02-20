@@ -1,3 +1,5 @@
+"""Send a POST request with a form-encoded data in the request body."""
+
 import mrequests
 
 
