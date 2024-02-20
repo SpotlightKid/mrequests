@@ -206,7 +206,7 @@ class Response:
             self.chunked = True
             # print("Chunked response detected.")
         elif data[:15].lower() == b"content-length:":
-            self._content_size = int(data.split(b":", 1)[1])
+            self._content_size = int(data[15:])
             # print("Content length: %i" % self._content_size)
         elif data[:17].lower() == b"content-encoding:":
             self.encoding = data[17:].decode().strip()
@@ -216,7 +216,7 @@ class Response:
         self._parse_header(data)
 
         if self.headers is not None:
-            self.headers.append(data)
+            self.headers.append(data.rstrip(b"\r\n"))
 
     def close(self):
         if not MICROPY:
