@@ -129,19 +129,19 @@ class RequestContext:
 
 class Response:
     def __init__(self, sock, sockfile, save_headers=False):
-        self.sock = sock
-        self.sf = sockfile
-        self.encoding = "utf-8"
         self._cached = None
         self._chunk_size = 0
         self._content_size = 0
+        self._sf = sockfile
+        self._sock = sock
         self.chunked = False
-        self.status_code = None
-        self.reason = ""
+        self.encoding = "utf-8"
         self.headers = [] if save_headers else None
+        self.reason = ""
+        self.status_code = None
 
     def read(self, size=MAX_READ_SIZE):
-        sf = self.sf
+        sf = self._sf
 
         if self.chunked:
             if self._chunk_size == 0:
@@ -220,11 +220,11 @@ class Response:
 
     def close(self):
         if not MICROPY:
-            self.sf.close()
-            self.sf = None
-        if self.sock:
-            self.sock.close()
-            self.sock = None
+            self._sf.close()
+            self._sf = None
+        if self._sock:
+            self._sock.close()
+            self._sock = None
         self._cached = None
 
     @property
@@ -233,8 +233,8 @@ class Response:
             try:
                 self._cached = self.read(size=None)
             finally:
-                self.sock.close()
-                self.sock = None
+                self._sock.close()
+                self._sock = None
         return self._cached
 
     @property
