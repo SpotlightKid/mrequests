@@ -7,13 +7,16 @@ on microcontrollers with restrained memory.
 """
 
 import os
-import ubinascii
+try:
+    from binascii import hexlify
+except ImportError:
+    from ubinascii import hexlify
 
 import mrequests
 
 
 def create_multipart_request(file=None, filename=None, data=None):
-    boundary = ubinascii.hexlify(os.urandom(16))
+    boundary = hexlify(os.urandom(16))
     lines = []
 
     if data:

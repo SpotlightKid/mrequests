@@ -13,7 +13,10 @@ MAX_READ_SIZE = 4 * 1024
 
 
 def encode_basic_auth(user, password):
-    from ubinascii import b2a_base64
+    try:
+        from binascii import b2a_base64
+    except ImportError:
+        from ubinascii import b2a_base64
 
     auth_encoded = b2a_base64(b"%s:%s" % (user, password)).rstrip(b"\n")
     return {b"Authorization": b"Basic %s" % auth_encoded}
@@ -242,9 +245,12 @@ class Response:
         return str(self.content, self.encoding)
 
     def json(self):
-        import ujson
+        try:
+            import json
+        except ImportError:
+            import ujson as json
 
-        return ujson.loads(self.content)
+        return json.loads(self.content)
 
 
 def request(
@@ -265,9 +271,12 @@ def request(
 
     if json is not None:
         assert data is None
-        import ujson
+        try:
+            import json
+        except ImportError:
+            import ujson as json
 
-        data = ujson.dumps(json)
+        data = json.dumps(json)
 
     ctx = RequestContext(url, method)
 
@@ -289,9 +298,13 @@ def request(
             sock.connect(ai[-1])
             if ctx.scheme == "https":
                 try:
-                    import ssl
+                    import import tls as ssl
                 except ImportError:
-                    import ussl as ssl
+                    try:
+                        import ssl
+                    except ImportError:
+                        import ussl as ssl
+
 
                 # print("Wrapping socket with SSL")
                 create_ctx = getattr(ssl, 'create_default_context', None)
