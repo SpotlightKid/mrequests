@@ -298,7 +298,7 @@ def request(
             sock.connect(ai[-1])
             if ctx.scheme == "https":
                 try:
-                    import import tls as ssl
+                    import tls as ssl
                 except ImportError:
                     try:
                         import ssl
