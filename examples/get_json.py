@@ -7,6 +7,7 @@ host = "http://httpbin.org/"
 # host = "http://localhost/"
 url = host + "get"
 r = mrequests.get(url, headers={b"Accept": b"application/json"})
+print("Response object instance:")
 print(r)
 
 if r.status_code == 200:
@@ -14,7 +15,7 @@ if r.status_code == 200:
     print(r.content)
     print("Response body decoded to string:")
     print(r.text)
-    print("Data from decode from JSON notation in response body:")
+    print("Data from decoded from JSON notation in response body:")
     print(r.json())
 else:
     print("Request failed. Status: {}".format(r.status_code))
