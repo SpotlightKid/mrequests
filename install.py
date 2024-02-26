@@ -25,8 +25,16 @@ from posixpath import join as pjoin, split as psplit
 from subprocess import run
 from urllib.parse import urlparse
 
-from mpremote.main import State, argparse_filesystem
-from mpremote.commands import do_connect, do_disconnect, do_filesystem
+try:
+    from mpremote.main import State, argparse_filesystem
+    from mpremote.commands import do_connect, do_disconnect, do_filesystem
+except ImportError:
+    sys.exit("""\
+Could not import 'mpremote' module.
+Please install it, e.g. with:
+
+    python -m pip install mpremote
+""")
 
 
 HASH_CMD = """\
@@ -106,7 +114,7 @@ def do_install():
     )
     ap.add_argument(
         "device",
-        nargs="?",
+        nargs="*",
         default=["auto"],
         help=(
             "Device of MicroPython board to install to. "
