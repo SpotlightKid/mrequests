@@ -32,18 +32,18 @@ def create_multipart_request(file=None, filename=None, data=None):
         lines.append(b"")
         lines.append(file.read())
 
-    lines.append(b"--" + boundary + "--")
+    lines.append(b"--" + boundary + b"--")
     lines.append(b"")
 
     return {b"content-type": b"multipart/form-data; boundary=" + boundary}, b"\r\n".join(lines)
 
 
-def upload_file(url, filename, **args):
+def upload_file(url, filename, **kw):
     with open(filename, "rb") as fp:
         if "/" in filename:
             filename = filename.rsplit("/", 1)[1]
 
-        headers, data = create_multipart_request(fp, filename.encode("ascii"), data=args)
+        headers, data = create_multipart_request(fp, filename.encode("ascii"), data=kw)
 
     return mrequests.post(url, headers=headers, data=data)
 
@@ -51,8 +51,18 @@ def upload_file(url, filename, **args):
 if __name__ == "__main__":
     import sys
 
-    url = sys.argv[1]
-    filename = sys.argv[2]
+    try:
+        url = sys.argv.pop(1)
+    except:
+        url = "http://httpbin.org/post"
+
+    try:
+        filename = sys.argv.pop(1)
+    except:
+        filename = hexlify(os.urandom(8)).decode() + ".txt"
+        with open(filename, "w") as fp:
+            fp.write("This is a dummy text file for testing HTTP file upload.\n")
+
     data = {}
     for arg in sys.argv[3:]:
         k, v = arg.encode().split(b"=")
