@@ -265,6 +265,7 @@ def request(
     save_headers=False,
     max_redirects=1,
     timeout=None,
+    ssl_context=None
 ):
     if auth:
         headers.update(auth if callable(auth) else encode_basic_auth(auth[0], auth[1]))
@@ -306,12 +307,16 @@ def request(
                         import ussl as ssl
 
 
-                # print("Wrapping socket with SSL")
-                create_ctx = getattr(ssl, 'create_default_context', None)
-                if create_ctx:
-                    sock = create_ctx().wrap_socket(sock, server_hostname=ctx.host)
-                else:
-                    sock = ssl.wrap_socket(sock, server_hostname=ctx.host)
+                # print("Wrapping socket with TLS")
+                if ssl_context is None:
+                    if hasattr(ssl, "create_default_context"):
+                        ssl_context = ssl.create_default_context()
+                    else:
+                        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+                        if hasattr(ssl, "CERT_OPTIONAL"):
+                            ssl_context.verify_mode = ssl.CERT_OPTIONAL
+
+                sock = ssl_context.wrap_socket(sock, server_hostname=ctx.host)
 
             sf = sock if MICROPY else sock.makefile("rwb")
             sf.write(b"%s %s HTTP/1.1\r\n" % (ctx.method.encode("ascii"), ctx.path.encode("ascii")))
