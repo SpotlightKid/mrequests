@@ -23,6 +23,8 @@ support is required.
 
 ### Features
 
+* Supports SSL/TLS with server certificate validation (as far as supported by
+  the `ssl` module of a given MicroPython port).
 * Supports redirection with absolute and relative URLs (see below for details).
 * Supports HTTP basic authentication (requires `ubinascii` module).
 * Supports socket timeouts.
@@ -32,7 +34,7 @@ support is required.
 * `Response` objects have a `save` method to save the response body to
   a file, reading the response data and writing the file in small chunks.
 * The `Response` class for response objects can be substituted by a custom
-  response class.
+  response class (usually defined by subclassing `Response`).
 
 
 ### Limitations
@@ -103,7 +105,7 @@ line, three different installation methods are provided via different scripts:
 
 * `install_mpremote.sh`(Bash script using [mpremote] binary)
 * `install.sh` (Bash script using [rshell] binary, legacy)
-* `install.py` (Python script using `mpremote` as alibrary)
+* `install.py` (Python script using `mpremote` as a library)
 
 
 ### `install_mpremote.sh`
@@ -115,7 +117,9 @@ The following should be installed and in your shell's `PATH`:
 
 Run the command:
 
-    ./install_mpremote.sh
+```con
+./install_mpremote.sh
+```
 
 This will compile the Python modules with `mpy-cross` and copy the resulting
 `.mpy` files to the board's flash using the `mpremote` command.
@@ -130,11 +134,15 @@ The following should be installed and in your shell's `PATH`:
 
 For boards with the `stm32` port run:
 
-    DESTDIR=/flash ./install.sh
+```con
+DESTDIR=/flash ./install.sh
+```
 
 For boards with the `esp8266` or `esp32` port run:
 
-    DESTDIR=/pyboard PORT=/dev/ttyUSB0 BAUD=115200 ./install.sh
+```con
+DESTDIR=/pyboard PORT=/dev/ttyUSB0 BAUD=115200 ./install.sh
+```
 
 This will compile the Python modules with `mpy-cross` and copy the resulting
 `.mpy` files to the board's flash using the `rshell` comamnd.
@@ -149,15 +157,19 @@ The following should be installed and in your shell's `PATH`:
 Also, `mpremote` should be available on your `PYTHONPATH`, e.g. installed via
 `pip`:
 
-    python -m pip install mpremote
+```con
+python -m pip install mpremote
+```
 
-Then run simply `install.py`:
+Then simply run `install.py`:
 
-    ./install.py
+```con
+./install.py
+```
 
 This will compile the Python modules with `mpy-cross` and copy the resulting
 `.mpy` files to the board's flash using the `mpremote` library. Run
-`install.py -h` to see installation options.
+`install.py -h` to review installation options.
 
 
 ### Manual installation
@@ -177,7 +189,14 @@ use).
 
 ## Examples
 
-See the scripts in the [examples](./examples) directory for more.
+Below are some basic usage examples of the `mrequests` module. More examples
+for special tasks can be found in the scripts in the [examples](./examples)
+directory. Some of these examples require extra modules from [micropython-lib].
+To install these requirements to a MicroPython board you can use [mpremote]:
+
+```con
+mpremote mip install collections-defaultdict
+```
 
 
 ### Simple GET request with JSON response
