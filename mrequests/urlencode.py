@@ -3,10 +3,7 @@
 # Extracted from: https://github.com/micropython/micropython-lib/blob/master/urllib.parse/urllib/parse.py
 #
 
-try:
-    from collections.defaultdict import defaultdict
-except ImportError:
-    from defaultdict import defaultdict
+from collections import defaultdict
 
 # XXX: Consider replacing with functools.lru_cache
 _safe_quoters = {}

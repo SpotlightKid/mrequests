@@ -177,17 +177,18 @@ This will compile the Python modules with `mpy-cross` and copy the resulting
 
 ### Manual installation
 
-For the `unix` port, just copy all the `.py` files in the root of the
-repository to a directory, which is in `sys.path`, e.g. `~/.micropython/lib`
-of or set the `MICROPYPATH` environment variable to a colon-separated list of
-directories including the one to which you copied the modules.
+For the `unix` port, just copy the `mrequest` directory with all files in it
+to a directory, which is in `sys.path`, e.g. `~/.micropython/lib`, or set the
+`MICROPYPATH` environment variable to a colon-separated list of directories
+including the one to which you copied the package directory.
 
-Note: the `mrequests.py` module has no dependencies besides modules usually
-already built in to the MicroPython firmware on all ports (as of version 1.15)
-and can be installed and used on its own. `defaultdict.py` and `urlencode.py`
-provide support for sending form-encoded request parameters or data (see the
-`formencode.py` script in the `examples` directory for an example of their
-use).
+Note: the `mrequests/mrequests.py` module has no dependencies besides modules
+usually already built in to the MicroPython firmware on all ports (as of
+version >= 1.15) and can be installed and used on its own if flash storage
+space or available RAM is scarce. The other modules in the `mrequests` package
+provide support for specific tasks like, for example, sending form-encoded
+request parameters or data or parsing url-encoded strings (see the scripts in
+the `examples` directory for examples of their use).
 
 
 ## Examples

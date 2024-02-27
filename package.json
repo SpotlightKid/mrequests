@@ -1,9 +1,10 @@
 {
   "urls": [
-    ["mrequests/__init__.py", "github:SpotlightKid/mrequests/mrequests.py"],
-    ["mrequests/urlencode.py", "github:SpotlightKid/mrequests/urlencode.py"],
-    ["mrequests/urlparseqs.py", "github:SpotlightKid/mrequests/urlparseqs.py"],
-    ["mrequests/urlunquote.py", "github:SpotlightKid/mrequests/urlunquote.py"]
+    ["mrequests/__init__.py", "github:SpotlightKid/mrequests/mrequests/__init__.py"],
+    ["mrequests/mrequests.py", "github:SpotlightKid/mrequests/mrequests/mrequests.py"],
+    ["mrequests/urlencode.py", "github:SpotlightKid/mrequests/mrequests/urlencode.py"],
+    ["mrequests/urlparseqs.py", "github:SpotlightKid/mrequests/mrequests/urlparseqs.py"],
+    ["mrequests/urlunquote.py", "github:SpotlightKid/mrequests/mrequests/urlunquote.py"]
   ],
   "deps": [
     ["collections-defaultdict", "latest"]

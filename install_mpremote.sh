@@ -2,19 +2,24 @@
 #
 # Install mrequests to a MicroPython board using mpremote
 
-MODULES=('defaultdict.py' 'mrequests.py' 'urlencode.py' 'urlparseqs.py' 'urlunquote.py')
-DESTDIR=":/lib"
+PKG="mrequests"
+MODULES=('__init__.py' 'mrequests.py' 'urlencode.py' 'urlparseqs.py' 'urlunquote.py')
+MPYDIR="build/$PKG"
+DESTDIR="${DESTDIR:-:/lib}"
 
-# Create the root lib folder
-# Will generate an error in the output if it already exists
-# 
+mkdir -p "$MPYDIR"
+# Create the installation directory
+# Will generate errors in the output if it already exists
+#
 # Traceback (most recent call last):
 #   File "<stdin>", line 2, in <module>
 # OSError: [Errno 17] EEXIST
-mpremote mkdir "${DESTDIR}"
+mpremote ${PORT:+connect $PORT} mkdir "${DESTDIR}"
+mpremote ${PORT:+connect $PORT} mkdir "${DESTDIR}/$PKG"
 
 for py in ${MODULES[*]}; do
-    echo "Compiling $py to ${py%.*}.mpy"
-    mpy-cross "$py"
-    mpremote cp ${py%.*}.mpy "${DESTDIR}/${py%.*}.mpy" 
+    mpy="${py%.*}.mpy"
+    echo "Compiling $PKG/$py to $MPYDIR/$mpy"
+    ${MPY_CROSS:-mpy-cross} -o "$MPYDIR/$mpy" "$PKG/$py"
+    mpremote ${PORT:+connect $PORT} cp "$MPYDIR/$mpy" "$DESTDIR/$PKG/$mpy"
 done

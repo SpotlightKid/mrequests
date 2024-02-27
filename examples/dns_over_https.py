@@ -1,10 +1,7 @@
 """Resolve an internet host address via via DNS over HTTPS (DoH) (using Cloudflare servers)."""
 
 import mrequests
-try:
-    from mrequests.urlencode import urlencode
-except ImportError:
-    from urlencode import urlencode
+from mrequests.urlencode import urlencode
 
 DOH_IP = "1.1.1.1"
 DOH_SERVER = b"cloudflare-dns.com"
