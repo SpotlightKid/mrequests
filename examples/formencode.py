@@ -5,10 +5,7 @@ import mrequests
 
 def request(method, url, data=None, json=None, headers=None, encoding=None):
     if isinstance(data, dict):
-        try:
-            from mrequests.urlencode import urlencode
-        except ImportError:
-            from urlencode import urlencode
+        from mrequests.urlencode import urlencode
 
         if headers is None:
             headers = {}
