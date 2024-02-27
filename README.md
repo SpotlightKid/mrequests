@@ -26,7 +26,7 @@ support is required.
 * Supports SSL/TLS with server certificate validation (as far as supported by
   the `ssl` module of a given MicroPython port).
 * Supports redirection with absolute and relative URLs (see below for details).
-* Supports HTTP basic authentication (requires `ubinascii` module).
+* Supports HTTP basic authentication (requires `binascii` module).
 * Supports socket timeouts.
 * Response headers can optionally be saved in the response object.
 * Respects `Content-length` header in response.
@@ -265,7 +265,7 @@ and returns a `Response` object:
 ```py
 request(method, url, data=None, json=None, headers={}, auth=None,
         encoding=None, response_class=Response, save_headers=False,
-        max_redirects=1, timeout=None)
+        max_redirects=1, timeout=None, ssl_context=None)
 ```
 
 Parameters:
@@ -338,6 +338,15 @@ operations will raise `OSError` if the timeout period value has elapsed before
 the operation has completed. If zero is given, the socket is put in
 non-blocking mode.
 
+*ssl_context (ssl.SSLContext)* - pass a custom `ssl.SSLContext` instance to
+configure TLS encryption and certificate handling. If performing an HTTPS
+request and no SSL context is passed, a default one is created, which allows
+an encrypted connection, but does not require the server to present a valid
+certificate. If the MicroPython port has proper SSL support, it is strongly
+recommended to pass your own SSL context instance, which has its `verify_mode`
+attribute set to `ssl.CERT_REQUIRED` and the required certificates loaded.
+See the documentation of the [ssl module] for details.
+
 ---
 
 Several convenience wrappers for creating request using common HTTP methods are
@@ -379,5 +388,6 @@ Please see the file [LICENSE](./LICENSE) for details.
 [mpremote]: https://docs.micropython.org/en/latest/reference/mpremote.html
 [requests]: https://github.com/psf/requests
 [rshell]: https://pypi.org/project/rshell/
+[ssl module]: https://docs.micropython.org/en/latest/library/ssl.html#class-sslcontext
 [test_urlparse]: ./tests/test_urlparse.py
 [urequests]: https://github.com/micropython/micropython-lib/blob/master/urequests/urequests.py
