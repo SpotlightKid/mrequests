@@ -11,14 +11,17 @@ extensions and many fixes and convenience features.
 
 ### Compatibility
 
-Supports the unix, stm32, esp8266 and esp32 MicroPython ports as well as
-CPython.
+Supports many MicroPython ports as well as CPython.
 
-On the unix, stm32 and esp8266 ports the SSL/TLS support has some limitations
-due to problems with MicroPython's `ssl` module on these platforms.
-
-On the stm32 port installing a custom-compiled firmware with network/SSL
-support is required.
+| Port    | Tested on                                     | Notes                                                                                                                        |
+| ------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| esp32   | GOOUUU-ESP32 (ESP-WROOM-32)                   |                                                                                                                              |
+| esp32s3 | Waveshare ESP32-S3-Zero                       |                                                                                                                              |
+| esp32c3 | Seeed Xiao-ESP32-C3                           |                                                                                                                              |
+| rp2     | Raspberry Pi Pico W                           |
+| esp8266 | LoLin NodeMcu v3 (ESP8266MOD)                 | Limited SSL/TLS support due to problems with ports `ssl` module                                                              |
+| stm32   | STM32F407VET6 / WIZNET W5500 Ethernet adapter | (Custom) firmware with network/SSL support enabled required. Limited SSL/TLS support due to problems with ports `ssl` module |
+| unix    | Arch Linux                                    | Limited SSL/TLS support due to problems with ports `ssl` module                                                              |
 
 
 ### Features
