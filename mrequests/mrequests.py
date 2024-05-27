@@ -372,12 +372,10 @@ def request(
 
             resp = response_class(sock, sf, save_headers=save_headers)
             l = b""
-            i = 0
             while True:
                 l += sf.read(1)
-                i += 1
 
-                if l.endswith(b"\r\n") or i > MAX_READ_SIZE:
+                if l.endswith(b"\r\n") or len(l) > MAX_READ_SIZE:
                     break
 
             # print("Response: %s" % l.decode("ascii"))
@@ -398,17 +396,30 @@ def request(
                 # print("Header: %r" % l)
                 resp.add_header(l)
         except OSError:
+            if not MICROPY:
+                try:
+                    sf.close()
+                    del sf
+                except:
+                    pass
             sock.close()
+            del sock
             raise
 
         if ctx.redirect:
             # print("Redirect to: %s" % ctx.url)
+            if not MICROPY:
+                try:
+                    sf.close()
+                    del sf
+                except:
+                    pass
             sock.close()
+            del sock
             max_redirects -= 1
 
             if max_redirects < 0:
                 raise ValueError("Maximum redirection count exceeded.")
-
         else:
             break
 
