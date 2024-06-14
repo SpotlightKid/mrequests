@@ -198,6 +198,8 @@ class Response:
                 raise NotImplementedError("Cannot set chunk_size when using a buffer with CPython."
                     " Use a buffer or memoryview of appropriate size instead.")
 
+        remain = self._content_size
+
         while True:
             if buf:
                 num_read_chunk = self.readinto(buf, chunk_size)
