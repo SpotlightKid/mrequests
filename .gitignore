@@ -3,3 +3,4 @@ __pycache__
 *.mpy
 .DS_Store
 build/
+tests/output/
